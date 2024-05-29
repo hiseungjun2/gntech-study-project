@@ -1,0 +1,16 @@
+<context>
+	<Resource name="jdbc/jungonara"
+    	auth="Container"
+    	type="javax.sql.DataSource"
+    	driverClassName="com.mysql.jdbc.Driver"
+    	username="tmdwns9738"
+    	password="Fifa2002"
+    	url="jdbc:mysql://localhost:3306/tmdwns9738"
+    	maxWait="5000"
+    	/>
+</context>
+<!-- 
+url="jdbc:mysql://localhost:3306/jungonara" 
+username="root"
+password="fifa2002"
+-->

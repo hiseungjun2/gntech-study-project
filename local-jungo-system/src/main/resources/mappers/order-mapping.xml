@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="usernamespace"> 
+	
+	<!-- order 은 mybatis-config.xml에서 정의한 Alias명 (com.gntech.dto.orderDTO) -->
+	
+	<!-- ************************index************************** -->
+	<!-- 전체리스트 -->
+	<select id="ListIndex" resultType="order" parameterType="hashmap">
+		SELECT * FROM order_tb WHERE checkYN = 'N' and status = '검토중' ORDER BY id DESC LIMIT #{start}, #{end}
+	</select>
+	
+	<!-- 신청내역 글 갯수 카운트 -->
+	<select id="SelectIndexCount" resultType="Integer">
+		SELECT COUNT(*) FROM order_tb WHERE checkYN = 'N' and status = '검토중'
+	</select>
+	
+	<!-- 신청내역 조회 -->
+	<select id="SelectIndex" resultType="order" parameterType="Integer">
+		SELECT * FROM order_tb WHERE id = #{id}
+	</select>
+	
+	<!-- 신청내역 수락(매입가변동x) -->
+	<update id="CheckYIndex" parameterType="order">
+		UPDATE order_tb SET checkYN = 'Y', status = '진행중', return_price = #{return_price} WHERE id = #{id}
+	</update>
+	
+	<!-- 신청내역 수락(매입가변동o) -->
+	<update id="CheckYIndexPrice" parameterType="order">
+		UPDATE order_tb SET checkYN = 'Y', status = '매입가검토중', return_price = #{return_price} WHERE id = #{id}
+	</update>
+	
+	<!-- 신청내역 취소 -->
+	<update id="CheckNIndex" parameterType="Integer">
+		UPDATE order_tb SET checkYN = 'Y', status = '거래취소', return_price = 0 WHERE id = #{id}
+	</update>
+	<!-- ************************************************************ -->
+	
+	
+	
+	
+	
+	<!-- ************************check******************************** -->
+	<!-- 진행중인 상태 리스트 -->
+	<select id="ListCheck" resultType="order" parameterType="hashmap">
+		SELECT * FROM order_tb WHERE status = '진행중' OR status = '매입가검토중' ORDER BY id DESC LIMIT #{start}, #{end}
+	</select>
+	
+	<!-- 신청내역 글 갯수 카운트 -->
+	<select id="SelectCheckCount" resultType="Integer">
+		SELECT COUNT(*) FROM order_tb WHERE status = '진행중' OR status = '매입가검토중'
+	</select>
+	
+	<!-- 검토내역 상세조회 -->
+	<select id="SelectCheck" resultType="order" parameterType="Integer">
+		SELECT * FROM order_tb WHERE id = #{id}
+	</select>
+	
+	<!-- 검토내역 메모 입력 -->
+	<update id="InsertMemo" parameterType="order">
+		UPDATE order_tb SET memo = #{memo} WHERE id = #{id}
+	</update>
+	
+	<!-- 검토내역 수거완료 -->
+	<update id="UpdateResult" parameterType="Integer">
+		UPDATE order_tb SET status = '거래완료' WHERE id = #{id}
+	</update>
+	<!-- ************************************************************ -->
+	
+	
+	
+	
+	
+	
+	
+	<!-- ************************result******************************** -->
+	<!-- 결과내역 리스트 (완료)-->
+	<select id="ListResult" resultType="order" parameterType="hashmap">
+		SELECT * FROM order_tb WHERE status = '거래완료' ORDER BY id DESC LIMIT #{start}, #{end}
+	</select>
+	
+	<!-- 결과내역 리스트 (취소)-->
+	<select id="ListResultCancel" resultType="order" parameterType="hashmap">
+		SELECT * FROM order_tb WHERE status = '거래취소' ORDER BY id DESC LIMIT #{start}, #{end}
+	</select>
+	
+	<!-- 결과내역 상세조회 -->
+	<select id="SelectResult" resultType="order" parameterType="Integer">
+		SELECT * FROM order_tb WHERE id = #{id};
+	</select>
+	
+	<!-- 결과내역 갯수 (완료) -->
+	<select id="SelectResultCount" resultType="Integer">
+		SELECT COUNT(*) FROM order_tb WHERE status = '거래완료'
+	</select>
+	
+	<!-- 결과내역 갯수 (취소) -->
+	<select id="SelectResultCancelCount" resultType="Integer">
+		SELECT COUNT(*) FROM order_tb WHERE status = '거래취소'
+	</select>
+	<!-- ************************************************************ -->
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- ************************mobile******************************* -->
+	<!-- 모바일 사용자 거래내역 조회 -->
+	<select id="ListMobile" resultType="order" parameterType="order">
+		SELECT * FROM order_tb WHERE order_name = #{order_name} AND order_phone = #{order_phone} ORDER BY id DESC
+	</select>
+	
+	<!-- 게시판 글 갯수 카운트-->
+	<select id="CountMobile" resultType="Integer">
+		SELECT COUNT(*) FROM order_tb
+	</select>
+	
+	<!-- 사용자 판매물품 등록 (insert) -->
+	<insert id="InsertMobile" parameterType="order">
+		INSERT INTO order_tb (order_num, pro_name, pro_content, price, checkYN, status,
+											order_name, order_phone, order_address, order_date, return_price)
+		VALUES (#{order_num}, #{pro_name}, #{pro_content}, #{price}, #{checkYN}, #{status},
+						#{order_name}, #{order_phone}, #{order_address}, now(), #{return_price})
+	</insert>
+	
+	<!-- 회사가 제시한 판매금액 사용자 승인 (update) -->
+	<update id="UpdateMobile" parameterType="order">
+		UPDATE order_tb SET checkYN = #{checkYN}, status = #{status} WHERE order_num = #{order_num}
+	</update>
+	
+	<!-- ************************************************************ -->
+	
+
+	
+	
+	
+	
+</mapper>

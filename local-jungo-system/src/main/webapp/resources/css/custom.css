@@ -1,0 +1,27 @@
+body {
+    padding-top: 50px;
+}
+.container-body {
+    padding: 40px 15px;
+    height : 800px;
+}
+.container {
+    display : block;
+    margin-left : auto;
+    margin-right : auto;
+}
+.footer {
+    height : 95px;
+}
+.footer img {
+    display : inline;
+    margin : 20px 0 20px 600px;
+}
+.footer p {
+    display : inline;
+    margin-left : 100px;
+}
+
+#buyDiv, #sbDiv {
+	height : 380px;
+}
